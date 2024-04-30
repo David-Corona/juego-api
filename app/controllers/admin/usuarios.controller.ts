@@ -31,6 +31,20 @@ export const create: RequestHandler = async (req, res, next) => {
     }
 };
 
+export const update: RequestHandler = async (req, res, next) => {
+    try {
+        const result = await usuariosService.updateUser(+req.params.id, req.body);
+
+        return res.status(200).json({
+            message: "Usuario actualizado correctamente.",
+            data: result,
+        });
+
+    } catch(error) {
+        next(error);
+    }
+};
+
 export const remove: RequestHandler = async (req, res, next) => {
     try {
         await usuariosService.deleteUsers(req.body);

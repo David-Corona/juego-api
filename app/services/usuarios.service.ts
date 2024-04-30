@@ -32,23 +32,36 @@ class UsuariosService {
         is_active: usuario.is_active || false
       });
 
-      const resp = await newUsuario.save();    
-      console.log("RESP", resp);
-      return resp;
+      return await newUsuario.save();    
 
     } catch(error: any) {
       throw new ErrorHandler(500, "Error al crear usuario", error.message)
     }
   }
 
+  async updateUser(id: number, usuario: Usuario) {
+    try {
+      const user = await Usuario.findByPk(id);
+      if (!user) {
+        throw new ErrorHandler(400, "ID de usuario incorrecta.");
+      }
+
+      await user.update(usuario); // patch
+      return user;
+
+    } catch(error: any) {
+      throw new ErrorHandler(500, "Error al actualizar usuario", error.message)
+    }
+  }
+
   async deleteUsers(ids: number[]) {
     try {
       const users = await Usuario.findAll({ where: { id: ids }});
-        if (users.length !== ids.length) {
-          throw new ErrorHandler(400, "IDs de usuario incorrectas.");
-        }
-      
-        await Usuario.destroy({ where: { id: ids }}); 
+      if (users.length !== ids.length) {
+        throw new ErrorHandler(400, "IDs de usuario incorrectas.");
+      }
+    
+      await Usuario.destroy({ where: { id: ids }}); 
 
     } catch(error: any) {
       throw new ErrorHandler(500, "Error al eliminar usuario", error.message)

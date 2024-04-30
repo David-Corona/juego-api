@@ -7,6 +7,8 @@ import { checkAuth } from '../../middleware/check-auth';
 const router = express.Router();
 router.get("/", UsuariosAdminController.findAll);
 router.post("/create", UsuariosAdminController.create);
+router.patch("/update/:id", UsuariosAdminController.update);
 router.post("/delete", UsuariosAdminController.remove);
+
 
 export default router;
