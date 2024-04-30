@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 import Usuario from '../models/usuario.model';
 import { ErrorHandler } from '../helpers/error';
 
@@ -13,7 +15,48 @@ class UsuariosService {
     }
   }
 
-  
+  async createUser(usuario: Usuario) {
+    try {
+      const user = await Usuario.findOne({ where: { "email": usuario.email }})
+      if (user) {
+        throw new ErrorHandler(400, "El email ya está en uso.");
+      }
+
+      const hashedPassword = await bcrypt.hash(usuario.password, Number(process.env.BCRYPT_SALT));
+
+      const newUsuario = new Usuario({
+        nombre: usuario.nombre,
+        email: usuario.email,
+        password: hashedPassword,
+        role: usuario.role || 'user',
+        is_active: usuario.is_active || false
+      });
+
+      const resp = await newUsuario.save();    
+      console.log("RESP", resp);
+      return resp;
+
+    } catch(error: any) {
+      throw new ErrorHandler(500, "Error al crear usuario", error.message)
+    }
+  }
+
+  async deleteUsers(ids: number[]) {
+    try {
+      const users = await Usuario.findAll({ where: { id: ids }});
+        if (users.length !== ids.length) {
+          throw new ErrorHandler(400, "IDs de usuario incorrectas.");
+        }
+      
+        await Usuario.destroy({ where: { id: ids }}); 
+
+    } catch(error: any) {
+      throw new ErrorHandler(500, "Error al eliminar usuario", error.message)
+    }
+  }
+
+
+
 }
 
 export default new UsuariosService();

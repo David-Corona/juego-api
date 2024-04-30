@@ -185,7 +185,7 @@ class AuthService {
         expiryDate: tokenExpiryDate
       })
       await resetToken.save()
-        .catch(e => {
+        .catch((e: any) => {
             console.log("Error al crear token de reseteo de contraseña: ", e);
             throw new ErrorHandler(500, "Error al guardar token", e);
         });
