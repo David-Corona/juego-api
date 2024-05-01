@@ -1,15 +1,28 @@
 import bcrypt from 'bcrypt';
+import { FindOptions } from 'sequelize/types';
+import { Op } from 'sequelize';
 
 import Usuario from '../models/usuario.model';
 import { ErrorHandler } from '../helpers/error';
 
 
+
 class UsuariosService {
 
-  async listAll() {
+  async listAll(page: number, pageSize: number) {
     try {
-      const usuarios = await Usuario.findAll();
+
+
+      const options: FindOptions = {
+        limit: pageSize,
+        offset: (page - 1) * pageSize,
+        // where: filters // Apply filters if provided
+      };
+
+
+      const usuarios = await Usuario.findAndCountAll(options);
       return usuarios;
+
     } catch(error: any) {
       throw new ErrorHandler(500, "Error al listar usuarios", error.message)
     }
