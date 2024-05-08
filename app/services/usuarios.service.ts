@@ -6,20 +6,10 @@ import Usuario from '../models/usuario.model';
 import { ErrorHandler } from '../helpers/error';
 
 
-
 class UsuariosService {
 
-  async listAll(page: number, pageSize: number) {
+  async listAll( options: FindOptions) {
     try {
-
-
-      const options: FindOptions = {
-        limit: pageSize,
-        offset: (page - 1) * pageSize,
-        // where: filters // Apply filters if provided
-      };
-
-
       const usuarios = await Usuario.findAndCountAll(options);
       return usuarios;
 

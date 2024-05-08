@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { ExtendedRequest } from '../helpers/types';
+import { ExtendedRequest } from '../helpers/types.helper';
 import Usuario from '../models/usuario.model'
 
 

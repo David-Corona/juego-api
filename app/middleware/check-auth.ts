@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { ExtendedRequest } from '../helpers/types';
+import { ExtendedRequest } from '../helpers/types.helper';
 const { TokenExpiredError } = jwt;
 
 
